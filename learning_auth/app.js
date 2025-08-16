@@ -6,23 +6,28 @@ const User = require('./models/user');
 const Bcrypt = require('bcrypt');
 const session = require('express-session');
 
+// connecting to mongoose 
 main().catch(err => console.log(err));
 
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/authDemo');
-    console.log('Connected!!');
+    console.log('mongoose connected!!');
 }
 
-
+// middlewares 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 
+// session key 
 app.use(session({ secret: 'secretKey' }));
 
+// home route 
 app.get('/home', (req, res) => {
     res.render('home');
 })
+
+// register routes
 app.get('/register', (req, res) => {
     res.render('register');
 });
@@ -39,6 +44,7 @@ app.post('/register', async (req, res) => {
 
 });
 
+// login routes
 app.get('/login', (req, res) => {
     res.render('login');
 });
@@ -54,7 +60,7 @@ app.post('/login', async (req, res) => {
         res.send('Either username or password is incorrect!, try again');
     }
 });
-
+// hidden route 
 app.get('/hidden', (req, res) => {
     if (!req.session.user_id) {
         res.redirect('/login');
@@ -62,6 +68,7 @@ app.get('/hidden', (req, res) => {
     res.send('I am only visible to authenticate users!!');
 })
 
+// connecting to server
 app.listen(3000, () => {
     console.log('App connected!!');
 })
