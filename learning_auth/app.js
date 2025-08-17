@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
     const validUser = await Bcrypt.compare(password, user.password);
     if (validUser) {
         req.session.user_id = user._id;
-        res.send('Welcome to the site!!');
+        res.render('home');
     }
     else {
         res.send('Either username or password is incorrect!, try again');
@@ -65,7 +65,12 @@ app.get('/hidden', (req, res) => {
     if (!req.session.user_id) {
         res.redirect('/login');
     }
-    res.send('I am only visible to authenticate users!!');
+    res.render('hidden');
+})
+// logout route 
+app.post('/logout', (req, res) => {
+    req.session.user_id = null;
+    res.render('login');
 })
 
 // connecting to server
