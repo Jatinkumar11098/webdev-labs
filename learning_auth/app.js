@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = require('./models/user');
 const Bcrypt = require('bcrypt');
 const session = require('express-session');
+const engine = require('ejs-mate');
 
 // connecting to mongoose 
 main().catch(err => console.log(err));
@@ -15,6 +16,7 @@ async function main() {
 }
 
 // middlewares 
+app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
