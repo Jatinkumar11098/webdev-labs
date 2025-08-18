@@ -16,6 +16,12 @@ async function main() {
 }
 
 // middlewares 
+const requireLogin = (req, res, next) => {
+    if (!req.session.user_id) {
+        return res.render('login');
+    }
+    next();
+}
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -63,10 +69,7 @@ app.post('/login', async (req, res) => {
     }
 });
 // hidden route 
-app.get('/hidden', (req, res) => {
-    if (!req.session.user_id) {
-        res.redirect('/login');
-    }
+app.get('/hidden', requireLogin, (req, res) => {
     res.render('hidden');
 })
 // logout route 
